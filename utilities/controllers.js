@@ -1,6 +1,6 @@
 import sql from './db.js';
 import sqlite3 from 'sqlite3';
-import { createHourlyBucket } from './index.js';
+import { createHourlyBucket } from '../index.js';
 
 
 const controllers = {};
