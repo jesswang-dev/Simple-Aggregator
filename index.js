@@ -148,7 +148,7 @@ export const createHourlyCounts = (data, userId, timeStampA, timeStampB, hourlyB
  */
 
 // const results = [];
-// fs.createReadStream('events.csv')
+// fs.createReadStream('./database/events.csv')
 //   .pipe(csv(['customer_id', 'event_type', 'transaction_id', 'timestamp']))
 //   .on('data', (data) => results.push(data))
 //   .on('end', () => {

@@ -1,6 +1,6 @@
-import sql from './db.js';
+import sql from './utilities/db.js';
 import sqlite3 from 'sqlite3';
-import { createHourlyBucket } from '../index.js';
+import { createHourlyBucket } from './index.js';
 
 
 const controllers = {};
@@ -46,7 +46,7 @@ controllers.requestDataLocal = (req, res, next) => {
         if (error) {
             throw error;
         }
-        // console.log('rows in middelware',rows);
+        
         res.locals.data = rows;
         db.close()
         return next();
@@ -61,7 +61,7 @@ controllers.countHourly = (req, res, next) => {
     //create the hourlyBuckets with function createHourlyBucket
     const hourlyBuckets = createHourlyBucket(from, to);
 
-    console.log(hourlyBuckets);
+    // console.log(`hourlyBuckets`, hourlyBuckets);
     const data = res.locals.data;
 
     const hourlyCount = {};

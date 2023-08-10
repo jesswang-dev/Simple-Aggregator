@@ -1,5 +1,5 @@
 import express from 'express';
-import controllers from './utilities/controllers.js';
+import controllers from './controllers.js';
 const app = express();
 const port = 3000;
 
