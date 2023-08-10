@@ -7,7 +7,7 @@ In project root directory, run the command below:
 npm install
 ```
 #### 2. Check the program in `index.js`
-Run the command below to check the main functionality to answer the prompt and the result of a given example will show up in the console. More details below.//add a link
+Run the command below to check the main functionality to answer the prompt and the result of a given example will show up in the console. More details below.
 ```bash
 npm start
 ```
@@ -181,7 +181,7 @@ route serverless can handle both the format.
    }
 ```
 
-Send requst to `localhost:3000/sqlite`, with Body in JSON format:
+- Send requst to `localhost:3000/sqlite`, with Body in JSON format:
 ```json
 
    {
@@ -191,10 +191,11 @@ Send requst to `localhost:3000/sqlite`, with Body in JSON format:
    }
 
 ```
-The result will display in postman's console like this
-![Alt text](/postman.png "Postman example")
+- The result will display in postman's console like this:
 
-Finally, for the server.js I built with express.js framework which makes me able to utilize the modulized middlware function to design the service here. The controller `countHourly` has been used on both route.
+![Alt text](/assets/postman.png "Postman example")
+
+- Finally, for the `server.js` I built with `express.js` framework which enables utilizing the middlware function to design the service to makes the server code modularized. The controller `countHourly` has been used on both route.
 
 ## Next Step
 1. Build a user interface to request and display the data
