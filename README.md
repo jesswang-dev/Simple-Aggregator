@@ -121,7 +121,7 @@ To start the server run the command below and the server will spin up at localho
 npm run dev
 ```
 #### 2. Database options in the project
-#### Serverless Service: NEON [option1]
+#### Serverless Service: NEON
 - <strong>Neon</strong> - a serverless Postgres database. To connect with it, create a `.env` file and configure it with the credential. I created a new role for my database for the convinence for the viewer of my code base. Following is the teamplate of the `.env` file;
 ```bash
       PGHOST='<% ENDPOINT_ID %>.us-east-2.aws.neon.tech'
@@ -130,6 +130,7 @@ npm run dev
       PGPASSWORD='<% PASSWORD %>'
       ENDPOINT_ID='<% ENDPOINT_ID %>'
 ```
+> *NOTICE: if the `.env` has not created, the server would throw error*
 
 - The file with connection info with Neon locates in `db.js`. Once .env file been setup, refresh the server, if connected successfully, the version info will be logged in the console like below:
 ```json
@@ -142,7 +143,7 @@ npm run dev
 CREATE TABLE event (customer_id VARCHAR(255), event_type VARCHAR(50), transaction_id VARCHAR(255), event_time TIMESTAMPTZ)
 ```
 
-#### SQLite [option2]
+#### SQLite
 - <strong>SQLite</strong> - a SQL database engine. I imported `events.csv` into `events.db`. The source code of the process locates in `sqlite3.js`, which can be executed and rebuild `events.db` if necessary.
 
 - `events.db` contains one Table `event`, where it has four columns `(customer_id, event_type, transaction_id, event_times)`.
