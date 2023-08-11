@@ -3,7 +3,7 @@ import fs from 'fs';
 import csv from 'csv-parser';
 
 //Connect to the sqlite database
-const db = new sqlite3.Database('./events.db', sqlite3.OPEN_READWRITE, (err) => {
+const db = new sqlite3.Database('../events.db', sqlite3.OPEN_READWRITE, (err) => {
   if (err) {
     console.error(err.message);
   }
@@ -25,7 +25,7 @@ db.run(`CREATE TABLE IF NOT EXISTS event
 
 
 //Import csv file into the event table
- fs.createReadStream("./events.csv")
+ fs.createReadStream("../database/events.csv")
   .pipe(csv(['id', 'type', 'transaction', 'timestamp']))
   .on("data", function (row) {
     // console.log('row',row);
