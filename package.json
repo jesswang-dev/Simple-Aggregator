@@ -1,7 +1,7 @@
 {
   "name": "simple-aggregator",
   "version": "1.0.0",
-  "description": "Metronome take-home assessment",
+  "description": "A coding challenge",
   "main": "index.js",
   "type": "module",
   "scripts": {
