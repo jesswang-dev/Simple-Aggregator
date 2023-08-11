@@ -1,7 +1,7 @@
 {
   "name": "simple-aggregator",
   "version": "1.0.0",
-  "description": "A coding challenge",
+  "description": "take-home assessment",
   "main": "index.js",
   "type": "module",
   "scripts": {

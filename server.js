@@ -13,27 +13,32 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-// app.use('/', (req, res) => {
-//     res.status(200).json("Hello World");
-// })
-
 
 /**
  * route handle the user request with id, and timestampA and timestampB
+ */
+
+/**
+ * route /sqlite, connect with local events.db
+ */
+
+app.use('/sqlite', controllers.requestDataLocal, controllers.countHourly, (req, res) => {
+    res.status(200).json(res.locals.result);
+})
+
+/**
+ * route /serverless, connect with neon service
  */
 
 app.use('/serverless', controllers.requestData, controllers.countHourly, (req, res) => {
     res.status(200).json(res.locals.result);
 })
 
-app.use('/sqlite', controllers.requestDataLocal, controllers.countHourly, (req, res) => {
-    res.status(200).json(res.locals.result);
-})
 /**
  * Handle the unkown routes
  */
 app.use((req, res) => {
-    res.status(404).json('404 Cannot find the page');
+    res.status(404).json('404 cannot find result');
 })
 
 /**
@@ -54,5 +59,5 @@ app.use((err, req, res, next) => {
 
 
 app.listen(port, () => {
-    console.log(`Sever is listening on port ${port}`);
+    console.log(`Server is listening on port ${port}`);
 })

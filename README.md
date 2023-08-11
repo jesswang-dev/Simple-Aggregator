@@ -76,7 +76,7 @@ if(Number.isInteger(diffHours)) {
    npm start
    ```
 
-   #### 2.Uncomment the last process start with `fs.createReadStream`.
+   #### 2.Uncomment the part below locates in `index.js` to start the the process of `fs.createReadStream()`.
 
    ```javascript
    const results = [];
@@ -121,34 +121,13 @@ To start the server run the command below and the server will spin up at localho
 npm run dev
 ```
 #### 2. Database options in the project
-#### Serverless Service: NEON
-- <strong>Neon</strong> - a serverless Postgres database. To connect with it, create a `.env` file and configure it with the credential. I created a new role for my database for the convinence for the viewer of my code base. Following is the teamplate of the `.env` file;
-```bash
-      PGHOST='<% ENDPOINT_ID %>.us-east-2.aws.neon.tech'
-      PGDATABASE='neondb'
-      PGUSER='<% USERNAME %>'
-      PGPASSWORD='<% PASSWORD %>'
-      ENDPOINT_ID='<% ENDPOINT_ID %>'
-```
-> *NOTICE: if the `.env` has not created, the server would throw error*
-
-- The file with connection info with Neon locates in `db.js`. Once .env file been setup, refresh the server, if connected successfully, the version info will be logged in the console like below:
-```json
-{
-   version: 'PostgreSQL 15.3 on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit'
-}
-```
-- The <strong>table</strong> we are going to use in the project called `events`. The service use postgreSQL, the datatype has been be defined like below. The `TIMESTAMPTZ` refers to timestamp with with the time zone.
-```sql
-CREATE TABLE event (customer_id VARCHAR(255), event_type VARCHAR(50), transaction_id VARCHAR(255), event_time TIMESTAMPTZ)
-```
 
 #### SQLite
-- <strong>SQLite</strong> - a SQL database engine. I imported `events.csv` into `events.db`. The source code of the process locates in `sqlite3.js`, which can be executed and rebuild `events.db` if necessary.
+- <strong>SQLite</strong> - a SQL database engine. I imported `events.csv` into `events.db`. The source code of the process locates in `sqlite3.js`, which can be executed and rebuild `events.db` if necessary. For now, `events.db` has already created.
 
 - `events.db` contains one Table `event`, where it has four columns `(customer_id, event_type, transaction_id, event_times)`.
 Here is the code snippet for creating the Table event in the `events.db`. 
-As below, I defined four columns as TEXT type, it is because SQLite does not have an official datetime type. It stores datetime as TEXT.
+As below, I defined 4 columns as TEXT type, it is because SQLite does not have an official datetime type. It stores datetime as TEXT.
 ```javascript
 db.run(`CREATE TABLE IF NOT EXISTS event 
         (customer_id TEXT, 
@@ -163,17 +142,38 @@ db.run(`CREATE TABLE IF NOT EXISTS event
 });
 ```
 
-#### 3. The Server `server.js`
-> For the route in server, I set up route`/serverless` to request data from Neon and `/sqlite` to request data from `events.db`
+- To work with the databse, send requst to `localhost:3000/sqlite`, with Body in JSON format:
+```json
 
-The connection between server and the database can be tested via <storng>Postman</strong>.
+   {
+    "id": "b4f9279a0196e40632e947dd1a88e857",
+    "from": "2021-03-01 03:00:08.000+00",
+    "to": "2021-03-01 07:20:08.000+00"
+   }
+```
 
-- Send request to `localhost:3000/serverless`, with `Body` in JSON format, like code shows below:
 
-- The format of the timestamp string has minor differce. Since as mentioned before SQLite stored TIMESTAMP in TEXT so I have to request the database in the format with the timezone offset at the end instead of the format ISO-8601 provided by the prompt.However the result of time buckets came with ISO-8601 format. 
+#### Serverless Service: NEON
+- <strong>Neon</strong> - a serverless Postgres database. To connect with it, create a `.env` file and configure it with the credential. I created a new role for my database for the convinence for the viewer of my code base. Following is the teamplate of the `.env` file;
+```bash
+      PGHOST='<% ENDPOINT_ID %>.us-east-2.aws.neon.tech'
+      PGDATABASE='neondb'
+      PGUSER='<% USERNAME %>'
+      PGPASSWORD='<% PASSWORD %>'
+      ENDPOINT_ID='<% ENDPOINT_ID %>'
+```
 
-- Send requst to `localhost:3000/serverless`, with Body in JSON format:
-route serverless can handle both the format.
+- The file with connection info with Neon locates in `utilities/db.js`. Once `.env` file been setup, refresh the server, if connected successfully, the version info will be logged in the console like below:
+```json
+{
+   version: 'PostgreSQL 15.3 on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit'
+}
+```
+- The <strong>table</strong> we are going to use in the project called `events`. The service use postgreSQL, the datatype has been be defined like below. `TIMESTAMPTZ` refers to timestamp with the time zone.
+```sql
+CREATE TABLE event (customer_id VARCHAR(255), event_type VARCHAR(50), transaction_id VARCHAR(255), event_time TIMESTAMPTZ)
+```
+- To work with Neon service, send requst to `localhost:3000/serverless`, with Body in JSON format:
 ```json
    {
       "id": "b4f9279a0196e40632e947dd1a88e857",
@@ -182,16 +182,15 @@ route serverless can handle both the format.
    }
 ```
 
-- Send requst to `localhost:3000/sqlite`, with Body in JSON format:
-```json
+#### 3. The Server `server.js`
+- For the route in server, I set up route`/serverless` to request data from Neon and `/sqlite` to request data from `events.db`
 
-   {
-    "id": "b4f9279a0196e40632e947dd1a88e857",
-    "from": "2021-03-01 03:00:08.000+00",
-    "to": "2021-03-01 07:20:08.000+00"
-   }
+The connection between server and the database can be tested via <storng>Postman</strong>.
 
-```
+- Send request to `localhost:3000/route`, with `Body` in JSON.
+
+- The JSON for the timestamp string has minor difference. Since as mentioned before SQLite stored TIMESTAMP in TEXT the `Body` sent with the HTTP request needs to be in the format with the Timezone Offset instead of the format in ISO-8601 provided by the prompt. However, the program conform the output with ISO-8601 format. In addition route `/serverless` can handle both the format.
+
 - The result will display in postman's console like this:
 
 ![Alt text](/assets/postman.png "Postman example")
@@ -200,6 +199,7 @@ route serverless can handle both the format.
 
 ## Next Step
 1. Build a user interface to request and display the data
-2. After I handled the edge case causes "buckets lacking" for time range such as 4:30 - 5:30, I a new issue that with timetamp at exact hours such as between "2021-03-01T03:00:00Z" and "2021-03-01T04:00:00Z", there will produce hourly Bucket
-["2021-03-01T03:00:00.000Z", "2021-03-01T04:00:00.000Z"] but the count for the second bucket will be 0; I ended up with the current solution because of the accuracy to handle with random strings. If concerning about the display, we can process the data further to omit the last bucket if the timestampB is right on the hour.
+2. After I handled the edge case caused "buckets lacking" for time range such as between 04:30:00 and 05:30:00, a new issue came out that with timetamp at exact hours such as between 03:00:00 and 04:00:00, function `createHourlyBucket` will result in time buckets array as such: ["2021-03-01T03:00:00.000Z", "2021-03-01T04:00:00.000Z"] so the count will end up with 0 for the second bucket.
+
+For the issue, I ended up with the current solution because of the accuracy to handle a variety of test cases. With use cases, for user request that timestampB is right on the hour. I will decide on do not display the result for the last bucket with value 0.
 

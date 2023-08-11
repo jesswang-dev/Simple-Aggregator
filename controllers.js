@@ -1,11 +1,17 @@
-import sql from './utilities/db.js';
 import sqlite3 from 'sqlite3';
 import { createHourlyBucket } from './index.js';
+
+/**
+ * Reminder:
+ * Uncomment the line below to use Neon service
+ */
+
+// import sql from './utilities/db.js';
 
 
 const controllers = {};
 
-//middleware that request data from database with request body
+//middleware that request data from neon
 //access the data from req.body
 controllers.requestData = async (req,res,next) => {
     const {id, from, to} = req.body;
@@ -22,6 +28,8 @@ controllers.requestData = async (req,res,next) => {
     return next();
 }
 
+//middleware that request data from events.db
+//access the data from req.body
 controllers.requestDataLocal = (req, res, next) => {
     const {id, from, to} = req.body;
     console.log(`req.body in requestDataLocal`, req.body);
@@ -68,7 +76,7 @@ controllers.countHourly = (req, res, next) => {
     hourlyBuckets.forEach((bucket) => hourlyCount[bucket] = 0);
 
 
-    //edge case: one bucket, the length of the data will be the count;
+    //edge case: one bucket, the length of the data will be the value of result;
     if(hourlyBuckets.length === 1) {
         hourlyCount[hourlyBuckets[0]] = data.length;
     } else {
