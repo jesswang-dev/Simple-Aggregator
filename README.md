@@ -2,42 +2,42 @@
 
 ## How to start
 #### 1. Install the packages
-In project root directory, run the command below:
+In root directory, run the command below to install packages used in the project.
 ```bash
 npm install
 ```
 #### 2. Check the program in `index.js`
-Run the command below to check the main functionality to answer the prompt and the result of a given example will show up in the console. More details below.
+Run the command below to check the main functionality to answer the prompt and the result of a given example will show up in the console. More details below (MVP).
 ```bash
 npm start
 ```
 #### 3. Start the server
-Run the command below to spin up at `localhost:3000`.
+Run the command below to spin up the server at `localhost:3000`.
 ```bash
 npm run dev
 ```
 
 #### 4.Testing
-Execute unit tests for `createHourlyBucket` and `createHourlyCounts` with:
+Run the command below to execute unit tests for `createHourlyBucket` and `createHourlyCounts`.
 ```bash
 npm run test
 ```
 
 ## Technical Details
 
-With data in `events.csv`, to answer the prompt
+With data in `events.csv`, to answer the prompt:
 
 > How many events did customer X send in the one hour buckets between arbitrary timestamps A and B?
 
+I broke problem down with following steps:
 
-### 1. MVP Algorithm
-   The problem can be intrepreted as:
+### 1. MVP (index.js)
+   The problem can be scoped down to:
 
-   > With the given userId, timestampA and timestampB, count the data rows that fits into one hour bucket. Here are tasks:
+   > With the given userId, timestampA and timestampB, count the data rows that fits into one hour bucket. Here are three tasks to be completed for the MVP:
    >  1. create a function to produce 'buckets';
-   >  2. find a process to read data;
-   >  3. create a process to filter data; 
-   >  3. create a function that evaluating which bucket the each data belong.
+   >  2. find a process to read and filter data;
+   >  3. create a function that evaluating which bucket each row belong.
    
    #### 1. Function `createHourlyBucket`
    Function `createHourlyBucket` takes two parameters `timeStampA` and `timeStampB` and return an array `buckets`, which contains strings of timestamp data represents buckets. Task 1 done!
@@ -55,10 +55,8 @@ let bucketNum = Math.ceil(diffHours);
 
 //solution:
 if(Number.isInteger(diffHours)) {
-   if (dateTimeA.getMinutes() === dateTimeB.getMinutes() ||       dateTimeA.getSeconds() === dateTimeB.getSeconds() || 
-   dateTimeA.getMilliseconds() === dateTimeB.getMilliseconds()) {
-            
-   bucketNum += 1;
+   if (dateTimeA.getMinutes() === dateTimeB.getMinutes() || dateTimeA.getSeconds() === dateTimeB.getSeconds() || dateTimeA.getMilliseconds() === dateTimeB.getMilliseconds()) {
+      bucketNum += 1;
    };
 };
 ```
@@ -67,10 +65,10 @@ if(Number.isInteger(diffHours)) {
    Function `createHourlyCounts` work as heavy-lifting process to manipulate the data. With the `events.csv` file, it implements algorithm to:
    1. Select data (with parameters userId, timeStampA, timeStamp);
    2. Evaluate the data selected and comparing the value with buckets in `hourlyBuckets` (output of createHourlyCounts). 
-   3. The function invoked inside data reading process (`fs.createReadStream`) to complete the task2, 3 and 4!
+   3. The function invoked inside data reading process (`fs.createReadStream`) to complete the task2, and task3!
 
    
-#### Instruction
+#### Instruction to run the MVP
    #### 1. Run the command below and the result of a given example will show up in the console.
    ```bash
    npm start
@@ -96,7 +94,7 @@ if(Number.isInteger(diffHours)) {
 });
    ```
 
-   #### 3. Check result with other values, change the value of the variables setup in the head of `index.js`. Also. `nodemon` has been setup with the command, just save and run to see the new result in the console.
+   #### 3. Check result with other values, change the value of the variables setup in the head of `index.js`. Also. `nodemon` has been set up with the command, just save current changes to see the new result in the console.
       
    ```javascript
       /**
@@ -109,12 +107,12 @@ if(Number.isInteger(diffHours)) {
    ```
 
 ### 2. HTTP service with the database
-   Reflecting on the MVP, it would be nicer to solve following questions:
-   1. Do the heavy lifting data manipulation while reading the file is NOT a good practice - everytime I request with different parameters, the whole file needs to be read again!
-   2. Setting up a database and make a server call and request the base will make the logic in `createHourlyCounts` much ligher.All the if statements to select the data based on user and timestamps will be completed with ONE single query!
-   3. The nature of .csv file listed by rows resembles of the table structure of SQL and I decided to use SQL database in the project.
+   Reflecting on the MVP, it would be nicer to solve following points:
+   1. Implementing the heavy-lifting data manipulation while reading the file is NOT a good practice - everytime requesting with different parameters, the whole .csv file is read again!
+   2. Setting up a database and make a server call and request the base will make the logic in `createHourlyCounts` much ligher. All the if statements to select the data based on userId and timestamps will be completed with ONE single query!
+   3. The nature of .csv file listed by rows resembles of the table structure of SQL. Choose a SQL database service to host the data.
 
-#### Instruction
+#### Instruction to run the service
 #### 1. Start the server at port 3000
 To start the server run the command below and the server will spin up at localhost:3000.
 ```bash
@@ -123,7 +121,8 @@ npm run dev
 #### 2. Database options in the project
 
 #### SQLite
-- <strong>SQLite</strong> - a SQL database engine. I imported `events.csv` into `events.db`. The source code of the process locates in `sqlite3.js`, which can be executed and rebuild `events.db` if necessary. For now, `events.db` has already created.
+- <strong>SQLite</strong> - a SQL database engine. I imported `events.csv` into `events.db`. The source code of the process locates in `sqlite3.js`, which can be executed and rebuild `events.db` if necessary. For now, `events.db` has already created. 
+***(It can be viewed in VSCode with extensions such as 'SQLite Viewer')***
 
 - `events.db` contains one Table `event`, where it has four columns `(customer_id, event_type, transaction_id, event_times)`.
 Here is the code snippet for creating the Table event in the `events.db`. 
