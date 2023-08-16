@@ -197,8 +197,6 @@ The connection between server and the database can be tested via <storng>Postman
 - Finally, for the `server.js` I built with `express.js` framework which enables utilizing the middlware function to design the service to makes the server code modularized. The controller `countHourly` has been used on both route.
 
 ## Next Step
-1. Build a user interface to request and display the data
-2. After I handled the edge case caused "buckets lacking" for time range such as between 04:30:00 and 05:30:00, a new issue came out that with timetamp at exact hours such as between 03:00:00 and 04:00:00, function `createHourlyBucket` will result in time buckets array as such: ["2021-03-01T03:00:00.000Z", "2021-03-01T04:00:00.000Z"] so the count will end up with 0 for the second bucket.
-
-For the issue, I ended up with the current solution because of the accuracy to handle a variety of test cases. With use cases, for user request that timestampB is right on the hour. I will decide on do not display the result for the last bucket with value 0.
+- [ ] Build a user interface to request and display the data.
+- [x] After I handled the edge case caused "buckets lacking" for time range such as between 04:30:00 and 05:30:00, a new issue came out that with timetamp at exact hours such as between 03:00:00 and 04:00:00, function `createHourlyBucket` will result in time buckets array as such: ["2021-03-01T03:00:00.000Z", "2021-03-01T04:00:00.000Z"] so the count will end up with 0 for the second bucket.
 
