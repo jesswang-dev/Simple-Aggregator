@@ -4,7 +4,7 @@ import csv from 'csv-parser';
 /**
  * The variable created here for running the program in this file, change the value to see diffrent result in the console.
  */
-const timeStampA = "2021-03-01T13:40:37.000Z";
+const timeStampA = "2021-03-01T13:00:00.000Z";
 const timeStampB = "2021-03-01T17:00:00.000Z";
 const userId = "b4f9279a0196e40632e947dd1a88e857";
 
@@ -71,7 +71,6 @@ export const createHourlyBucket = (timeA, timeB) => {
 
     //if dateTimeB is right on the hour, remove the last bucket which will have count 0
     if(dateTimeB.toJSON() === buckets[buckets.length - 1]) {
-        console.log(`dateTimeB ${dateTimeB}`)
         buckets.pop();
     }
     
