@@ -14,6 +14,13 @@ describe('function createHourlyBucket', () => {
     expect(buckets[0]).toEqual('2021-03-01T03:00:00.000Z')
   });
 
+  test('when timestampA and timestampB are different, both on the hour', () => {
+    const buckets = createHourlyBucket('2021-03-01T13:00:00.00Z', '2021-03-01T17:00:00.00Z');
+    expect(buckets.length).toEqual(4);
+    expect(buckets).toEqual(["2021-03-01T13:00:00.000Z", "2021-03-01T14:00:00.000Z", "2021-03-01T15:00:00.000Z", "2021-03-01T16:00:00.000Z"])
+  });
+
+
   test('when timestampA and timestampB are different but within the same hour', () => {
     expect(createHourlyBucket('2021-03-01T03:30:00.00Z', '2021-03-01T03:50:00.00Z')).toEqual(["2021-03-01T03:00:00.000Z"])
   });

@@ -4,8 +4,8 @@ import csv from 'csv-parser';
 /**
  * The variable created here for running the program in this file, change the value to see diffrent result in the console.
  */
-const timeStampA = "2021-03-01T02:30:00.000Z";
-const timeStampB = "2021-03-01T04:50:00.000Z";
+const timeStampA = "2021-03-01T13:40:37.000Z";
+const timeStampB = "2021-03-01T17:00:00.000Z";
 const userId = "b4f9279a0196e40632e947dd1a88e857";
 
 /**
@@ -50,7 +50,7 @@ export const createHourlyBucket = (timeA, timeB) => {
 
     if(Number.isInteger(diffHours)) {
         if (dateTimeA.getMinutes() === dateTimeB.getMinutes() || dateTimeA.getSeconds() === dateTimeB.getSeconds() || dateTimeA.getMilliseconds() === dateTimeB.getMilliseconds()) {
-        bucketNum += 1;
+            bucketNum += 1;
         }
     }
     
@@ -67,6 +67,12 @@ export const createHourlyBucket = (timeA, timeB) => {
     for(let i = 0; i < bucketNum; i++) {
         buckets.push(start.toJSON());
         start.setHours(start.getHours() + 1);
+    }
+
+    //if dateTimeB is right on the hour, remove the last bucket which will have count 0
+    if(dateTimeB.toJSON() === buckets[buckets.length - 1]) {
+        console.log(`dateTimeB ${dateTimeB}`)
+        buckets.pop();
     }
     
     return buckets;
