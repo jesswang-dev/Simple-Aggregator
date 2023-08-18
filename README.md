@@ -198,5 +198,6 @@ The connection between server and the database can be tested via <storng>Postman
 
 ## Next Step
 - [ ] Build a user interface to request and display the data.
+- [ ] Considering the process, main functionality requires input type validation, modify the project with Typescript.
 - [x] After I handled the edge case caused "buckets lacking" for time range such as between 04:30:00 and 05:30:00, a new issue came out that with timetamp at exact hours such as between 03:00:00 and 04:00:00, function `createHourlyBucket` will result in time buckets array as such: ["2021-03-01T03:00:00.000Z", "2021-03-01T04:00:00.000Z"] so the count will end up with 0 for the second bucket.
 
