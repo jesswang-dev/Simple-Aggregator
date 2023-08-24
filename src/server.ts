@@ -1,6 +1,6 @@
-import express from 'express';
-import controllers from './controllers.js';
-const app = express();
+import express, {Express, Request, Response, NextFunction} from 'express';
+import controllers from '../controllers.js';
+const app: Express = express();
 const port = 3000;
 
 
@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
  * route /sqlite, connect with local events.db
  */
 
-app.use('/sqlite', controllers.requestDataLocal, controllers.countHourly, (req, res) => {
+app.use('/sqlite', controllers.requestDataLocal, controllers.countHourly, (req: Request, res: Response) => {
     res.status(200).json(res.locals.result);
 })
 
@@ -30,14 +30,14 @@ app.use('/sqlite', controllers.requestDataLocal, controllers.countHourly, (req, 
  * route /serverless, connect with neon service
  */
 
-app.use('/serverless', controllers.requestData, controllers.countHourly, (req, res) => {
+app.use('/serverless', controllers.requestData, controllers.countHourly, (req: Request, res:Response) => {
     res.status(200).json(res.locals.result);
 })
 
 /**
  * Handle the unkown routes
  */
-app.use((req, res) => {
+app.use((req: Request, res:Response) => {
     res.status(404).json('404 cannot find result');
 })
 
@@ -45,7 +45,7 @@ app.use((req, res) => {
  * Global Error Handler, handling error in the middlewares
  */
 
-app.use((err, req, res, next) => {
+app.use((err: Error, req: Request, res: Response , next: NextFunction) => {
     const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
     status: 400,
